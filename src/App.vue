@@ -115,6 +115,7 @@ function required() {
 }
 function submitForm() {
   isFormSubmitted.value = true;
+  isInputValid.value = true;
   validateForm();
   calculateAge(dobData.days.val, dobData.months.val, dobData.years.val);
 }
