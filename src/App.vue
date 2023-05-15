@@ -114,6 +114,7 @@ function required() {
   else return false;
 }
 function submitForm() {
+  dobData.days.isValid = dobData.months.isValid = dobData.years.isValid = true;
   isFormSubmitted.value = true;
   isInputValid.value = true;
   validateForm();
