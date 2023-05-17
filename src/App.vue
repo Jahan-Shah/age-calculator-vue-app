@@ -174,7 +174,7 @@ function submitForm() {
       <div class="enter">
         <div class="enter__button">
           <div class="line"></div>
-          <button>
+          <button aria-label="Submit">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="46"
@@ -193,15 +193,15 @@ function submitForm() {
     </form>
     <div>
       <h2>
-        <span id="ageCountUp">{{ age.years }}</span
+        <span class="ageCountUp">{{ age.years }}</span
         >years
       </h2>
       <h2>
-        <span id="ageCountUp">{{ age.months }}</span
+        <span class="ageCountUp">{{ age.months }}</span
         >months
       </h2>
       <h2>
-        <span id="ageCountUp">{{ age.days }}</span
+        <span class="ageCountUp">{{ age.days }}</span
         >days
       </h2>
     </div>
@@ -364,7 +364,7 @@ button:is(:hover) {
   width: 1px;
 }
 
-#ageCountUp {
+.ageCountUp {
   animation: countUp 1s ease-in-out;
 }
 
