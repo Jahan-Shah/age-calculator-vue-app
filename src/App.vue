@@ -30,12 +30,14 @@ const age = reactive({
 });
 
 function calculateAge(day, month, year) {
-  if (day > 31 || month > 31 || year > currentYear) return;
   const today = new Date();
   const birthDate = new Date(year, month - 1, day);
 
-  const isValidDate = birthDate.getDate() === day;
-  if (!isValidDate) {
+  const isDayValid = birthDate.getDate() === day;
+  const isMonthValid = birthDate.getMonth() === month - 1;
+  const isYearValid = birthDate.getFullYear() === year;
+
+  if (!isDayValid || !isMonthValid || !isYearValid) {
     isInputValid.value = false;
     return;
   }
@@ -70,22 +72,23 @@ function animateAgeDisplay() {
   age.years = 0;
   age.months = 0;
   age.days = 0;
-  const incrementYear = Math.ceil((endYears.value - age.years) / 50);
-  const incrementMonths = Math.ceil((endMonths.value - age.months) / 50);
-  const incrementDays = Math.ceil((endDays.value - age.days) / 50);
+  const targetValue = {
+    years: endYears.value,
+    months: endMonths.value,
+    days: endDays.value,
+  };
+  const increments = {
+    years: Math.ceil((endYears.value - age.years) / 50),
+    months: Math.ceil((endMonths.value - age.months) / 50),
+    days: Math.ceil((endDays.value - age.days) / 50),
+  };
 
-  const intervalYears = setInterval(() => {
-    age.years += incrementYear;
-    if (age.years >= endYears.value) clearInterval(intervalYears);
-  }, 20);
-  const intervalMonths = setInterval(() => {
-    age.months += incrementMonths;
-    if (age.months >= endMonths.value) clearInterval(intervalMonths);
-  }, 20);
-  const intervalDays = setInterval(() => {
-    age.days += incrementDays;
-    if (age.days >= endDays.value) clearInterval(intervalDays);
-  }, 20);
+  for (const unit in increments) {
+    const interval = setInterval(() => {
+      age[unit] += increments[unit];
+      if (age[unit] >= targetValue[unit]) clearInterval(interval);
+    }, 20);
+  }
 }
 
 function validateForm() {
@@ -93,32 +96,27 @@ function validateForm() {
   if (dobData.days.val > 31) {
     dobData.days.isValid = false;
     isInputValid.value = false;
-  }
-  if (dobData.months.val > 12) {
+  } else if (dobData.months.val > 12) {
     dobData.months.isValid = false;
     isInputValid.value = false;
-  }
-  if (dobData.years.val > currentYear) {
+  } else if (dobData.years.val > currentYear) {
     dobData.years.isValid = false;
     isInputValid.value = false;
-  }
+  } else calculateAge(dobData.days.val, dobData.months.val, dobData.years.val);
 }
 function required() {
   if (isFormSubmitted.value === false) return;
-  if (
+  return (
     dobData.days.val === null ||
     dobData.months.val === null ||
     dobData.years.val === null
-  )
-    return true;
-  else return false;
+  );
 }
 function submitForm() {
   dobData.days.isValid = dobData.months.isValid = dobData.years.isValid = true;
   isFormSubmitted.value = true;
   isInputValid.value = true;
   validateForm();
-  calculateAge(dobData.days.val, dobData.months.val, dobData.years.val);
 }
 </script>
 
